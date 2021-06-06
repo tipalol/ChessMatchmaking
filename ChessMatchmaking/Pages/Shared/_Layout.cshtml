@@ -4,12 +4,22 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - ChessMatchmaking</title>
+    <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="lib/boardjs/css/chessboard-1.0.0.css">
     <style>
         body {
             background-color: rgb(49, 46, 43);
             color: #fff;
+        }
+        .icon-button
+        {
+            color: rgba(255, 255, 255, 0.5);
+            padding: 5px;
+        }
+        .icon-button:hover
+        {
+            color: hsla(0,0%,100%,0.8);
         }
     </style>
 </head>
@@ -36,7 +46,7 @@
     </main>
 </div>
 
-<footer class="border-top footer text-muted">
+<footer class="footer text-muted">
     <div class="container" style="color: #fff">
         &copy; 2021 - ChessMatchmaking
     </div>

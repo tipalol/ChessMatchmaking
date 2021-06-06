@@ -46,8 +46,11 @@ namespace ChessMatchmaking.Hubs
                 Searching.Remove(Current);
 
             if (Current.Status == Status.Fighting)
+            {
+                await Current.Enemy.OpponentDrawn();
                 Fighting.Remove(Current);
-            
+            }
+
             Logger.Debug("User disconnected");
         }
 
@@ -75,6 +78,16 @@ namespace ChessMatchmaking.Hubs
             {
                 Logger.Error("Client tried to send move, but error occurred: " + e.Message);
             }
+        }
+
+        public async Task Checkmate(string colorMated)
+        {
+            Logger.Debug($"The game just ended. {colorMated} was checkmated");
+        }
+
+        public async Task InDraw()
+        {
+            Logger.Debug("The game just ended with draw.");
         }
 
         public async Task Search()

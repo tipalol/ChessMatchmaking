@@ -6,6 +6,7 @@ var $status = $('#status');
 var $fen = $('#fen');
 var $pgn = $('#pgn');
 var currentSide = "no";
+var gameOn = false;
 
 var config = {
     orientation: "white",
@@ -14,6 +15,7 @@ var config = {
 };
 
 $pgn[0].hidden = true;
+$fen.hidden = true;
 
 board = Chessboard('board', config);
 
@@ -23,7 +25,7 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chessHub").build()
 
 connection.start().then(function () {
     //On Connection started
-    connection.invoke("Login", "Федя пидор");
+    connection.invoke("Login", "Fyodor Likhachev");
 }).catch(function (err) {
     return console.error(err.toString());
 });
@@ -42,9 +44,20 @@ document.getElementById("searchButton").addEventListener("click", function (even
     event.preventDefault();
 });
 
+document.getElementById("flipButton").addEventListener("click", function (event) {
+    board.flip();
+    event.preventDefault();
+});
+
+document.getElementById("suicideButton").addEventListener("click", function (event) {
+    connection.invoke("Suicide");
+    event.preventDefault();
+});
+
 connection.on("GameStarted", function (side){
     $("#searchButton")[0].hidden = true
     $pgn[0].hidden = false;
+    gameOn = true;
     
     var config = {
         orientation: side,
@@ -71,6 +84,8 @@ function onDragStart (source, piece, position, orientation) {
     
     
     if ((game.turn() !== currentSide.charAt(0))) return false;
+    
+    if (gameOn === false) return false;
     
     if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
         (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
@@ -111,6 +126,11 @@ connection.on("ReceiveMove", function(from, to) {
     updateStatus();
 });
 
+connection.on("OpponentDrawn", function() {
+    $status.html("Game over, your opponent has left the game");
+    gameOn = false;
+});
+
 // update the board position after the piece snap
 // for castling, en passant, pawn promotion
 function onSnapEnd () {
@@ -128,11 +148,13 @@ function updateStatus () {
     // checkmate?
     if (game.in_checkmate()) {
         status = 'Game over, ' + moveColor + ' is in checkmate.';
+        connection.invoke("Checkmate", moveColor);
     }
 
     // draw?
     else if (game.in_draw()) {
         status = 'Game over, drawn position';
+        connection.invoke("InDraw");
     }
 
     // game still on
@@ -148,6 +170,6 @@ function updateStatus () {
     $status.html(status);
     $fen.html(game.fen());
     $pgn.html(game.pgn({ max_width: 5, newline_char: '<br />' }));
-
+    $pgn.scrollTop = $pgn.scrollHeight;
     
 }

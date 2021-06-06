@@ -104,5 +104,10 @@ namespace ChessMatchmaking.Entities
 
             await _client.SendAsync("ReceiveMove", from, to);
         }
+
+        public async Task OpponentDrawn()
+        {
+            await _client.SendAsync("OpponentDrawn");
+        }
     }
 }
