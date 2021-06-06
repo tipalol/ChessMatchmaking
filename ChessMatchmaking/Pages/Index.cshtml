@@ -1,0 +1,26 @@
+﻿@page
+<div class="container">
+    <div class="row" style="margin-top: 50px">
+        <div class="col-md-6">
+            <div id="board" style="width: 400px;"></div>
+            <label>Status:</label>
+            <div id="status"></div>
+            <label>FEN:</label>
+            <div id="fen"></div>
+        </div>
+        <div class="col-md-6" style="background-color: rgba(0, 0, 0, 0.14);">
+            <button type="button" id="searchButton" class="btn btn-success btn-lg">Search</button>
+            <div id="turnHistory">
+                <label>История ходов:</label>
+                <div id="pgn" style="overflow-y: scroll; height:400px;"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/chessjs/chess.js"></script>
+<script src="~/lib/boardjs/js/chessboard-1.0.0.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
+<script src="~/js/clientchess.js"></script>
